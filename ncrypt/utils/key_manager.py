@@ -6,7 +6,7 @@ Secure storage and management of quantum-generated keys.
 import json
 import os
 from typing import List, Dict, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib
 import logging
 
@@ -55,7 +55,7 @@ class KeyManager:
         # Add default metadata
         metadata.update({
             "key_id": key_id,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "key_length": len(key),
             "key_hash": self._hash_key(key)
         })

@@ -63,7 +63,7 @@ This creates a `config.yaml` file with default settings.
 #### 2. Generate a Quantum Key
 
 ```bash
-# Using simulator (default) - 2000 qubits ensures 256+ bit keys for encryption
+# Using Ncrypt simulator (default) - 2000 qubits ensures 256+ bit keys for encryption
 ncrypt generate-key --bits 2000 --key-id my_first_key
 
 # Using AWS Braket local simulator
@@ -181,6 +181,9 @@ If the quantum bit error rate (QBER) exceeds the threshold (typically 11%), the 
 | `decrypt` | Decrypt a file using a quantum key |
 | `test-channel` | Test quantum channel quality |
 | `init-config` | Create a default configuration file |
+| `plan-execution` | **Plan operation with EXACT resource calculation** |
+| `estimate-cost` | Quick cost estimate for quantum devices |
+| `check-aws-costs` | Check real AWS Braket costs from billing data |
 
 ### Options
 
@@ -200,6 +203,145 @@ ncrypt encrypt \
 
 # Test channel quality
 ncrypt test-channel --bits 1000 --noise 0.01
+
+# Estimate costs before running on real devices
+ncrypt estimate-cost --bits 500 --device ionq
+ncrypt estimate-cost --bits 500 --device rigetti
+ncrypt estimate-cost --bits 500 --device simulator
+
+# Check real AWS Braket costs (requires AWS CLI configured)
+ncrypt check-aws-costs                    # Current month
+ncrypt check-aws-costs --month 2024-10   # Specific month
+ncrypt check-aws-costs --profile myprofile  # Different AWS profile
+```
+
+## 💰 AWS Cost Management
+
+### Before Using Real Quantum Devices
+
+#### 1. **Plan Execution (RECOMMENDED)** - Get EXACT numbers
+
+Uses simulator to calculate exact resource usage:
+
+```bash
+# Plan with simulator (shows exact expected key length)
+ncrypt plan-execution --bits 2000 --runs 5
+
+# Output:
+📊 Simulated Results (5 runs):
+   Average sifted key: 1001 bits
+   Average final key: 350 bits
+   Final key range: 347-357 bits
+   Average error rate: 0.0104
+✅ Expected key (350 bits) is sufficient for encryption
+
+# Plan with real device ARN (shows exact cost)
+ncrypt plan-execution --bits 500 \
+  --device-arn arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1 \
+  --runs 3
+
+# Output:
+💰 AWS Braket Resources (Real Device):
+   Device: Aria-1
+   Circuits to execute: 500
+   Shots per circuit: 1
+   Total tasks: 500
+   Task costs: $0.3 × 500 = $150.00
+   Shot costs: $0.01 × 500 = $5.00
+   TOTAL COST: $155.00
+```
+
+**Why use `plan-execution`?**
+- ✅ Runs actual simulations (not estimates)
+- ✅ Shows EXACT circuit counts
+- ✅ Predicts exact key length range
+- ✅ Calculates precise costs
+- ✅ Multiple runs for statistical accuracy
+
+#### 2. **Quick Estimate** - Fast cost calculation
+
+```bash
+# Quick cost estimate (no simulation)
+ncrypt estimate-cost --bits 500 --device ionq    # ~$155
+ncrypt estimate-cost --bits 500 --device rigetti # ~$150  
+ncrypt estimate-cost --bits 500 --device simulator # FREE
+```
+
+### Monitor Real AWS Costs
+
+**Check your actual AWS Braket spending:**
+```bash
+# Current month costs
+ncrypt check-aws-costs
+
+# Specific month
+ncrypt check-aws-costs --month 2024-10
+
+# Different AWS profile
+ncrypt check-aws-costs --profile production
+```
+
+**Example output:**
+```
+💰 Checking AWS Braket costs...
+
+📅 Period: 2024-10-01 to 2024-10-31
+✅ AWS Account: 123456789012
+   User/Role: quantum-dev
+
+🔬 Amazon Braket
+   Cost: $127.50
+
+💵 Total Braket Cost: $127.50
+💵 Total AWS Cost (all services): $458.23
+
+⚠️  Moderate costs - monitor usage
+```
+
+### Complete Cost Protection Workflow
+
+```bash
+# 1. Plan execution (get EXACT numbers)
+ncrypt plan-execution --bits 2000 \
+  --device-arn arn:aws:braket:us-east-1::device/qpu/rigetti/Aspen-M-3 \
+  --runs 5
+
+# Output shows:
+# - Exact circuits: 2000
+# - Expected key: 350 bits (range: 347-357)
+# - Exact cost: $300.35
+
+# 2. Check current AWS spending
+ncrypt check-aws-costs
+# Current month: $45.23
+
+# 3. Calculate total: $45.23 + $300.35 = $345.58
+
+# 4. If under budget, use --dry-run to verify
+ncrypt generate-key --bits 2000 --key-id prod_key \
+  --backend braket \
+  --device-arn arn:aws:braket:us-east-1::device/qpu/rigetti/Aspen-M-3 \
+  --dry-run
+
+# 5. Execute for real (removes --dry-run)
+ncrypt generate-key --bits 2000 --key-id prod_key \
+  --backend braket \
+  --device-arn arn:aws:braket:us-east-1::device/qpu/rigetti/Aspen-M-3
+
+# 6. Verify costs after
+ncrypt check-aws-costs
+```
+
+### Cost Protection Best Practices
+
+1. **Use `plan-execution`** for exact resource calculation
+2. **Use `--dry-run`** flag before real execution
+3. **Always check with `check-aws-costs`** before and after
+4. **Set AWS Budget alerts** ($50-100/month)
+5. **Start small** (100-500 circuits)
+6. **Prefer Rigetti** over IonQ (28x cheaper per shot)
+7. **Test on simulator** for development (always FREE)
+
 ```
 
 ## 📊 Examples

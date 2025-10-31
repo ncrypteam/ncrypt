@@ -48,9 +48,9 @@ class TestBB84Protocol:
             alice_bits, alice_bases, bob_bits, bob_bases
         )
         
-        # Bases match at indices 0, 1, 4, 5
-        assert len(alice_sifted) == 4
-        assert len(bob_sifted) == 4
+        # Bases match at indices 0, 1, 2, 4, 5 (5 matches)
+        assert len(alice_sifted) == 5
+        assert len(bob_sifted) == 5
     
     def test_full_protocol_low_noise(self):
         """Test full BB84 protocol with low noise."""
@@ -83,9 +83,9 @@ class TestQuantumEncryption:
     
     def test_encrypt_decrypt(self):
         """Test encryption and decryption."""
-        # Generate a quantum key
+        # Generate a quantum key (need 2000+ bits to get 256 bits after BB84 processing)
         protocol = BB84Protocol()
-        result = protocol.run_protocol(n_bits=1000, noise_level=0.01)
+        result = protocol.run_protocol(n_bits=2000, noise_level=0.01)
         assert result is not None
         
         # Encrypt
@@ -104,8 +104,8 @@ class TestQuantumEncryption:
     def test_decrypt_wrong_key(self):
         """Test decryption with wrong key (should fail)."""
         protocol = BB84Protocol()
-        result1 = protocol.run_protocol(n_bits=1000, noise_level=0.01)
-        result2 = protocol.run_protocol(n_bits=1000, noise_level=0.01)
+        result1 = protocol.run_protocol(n_bits=2000, noise_level=0.01)
+        result2 = protocol.run_protocol(n_bits=2000, noise_level=0.01)
         
         qe = QuantumEncryption()
         plaintext = b"Secret message"
@@ -119,9 +119,9 @@ class TestQuantumEncryption:
         """Test file encryption and decryption."""
         # Create temporary directory
         with tempfile.TemporaryDirectory() as tmpdir:
-            # Generate key
+            # Generate key (need 2000+ bits to get 256 bits after BB84 processing)
             protocol = BB84Protocol()
-            result = protocol.run_protocol(n_bits=1000, noise_level=0.01)
+            result = protocol.run_protocol(n_bits=2000, noise_level=0.01)
             assert result is not None
             
             # Create test file
