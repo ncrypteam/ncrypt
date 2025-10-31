@@ -1,210 +1,206 @@
-# Quick Reference: Quantum vs Classical in nCrypt
+# Quick Reference: Quantum vs Classical Computing in nCrypt
 
-## 🎯 One-Page Cheat Sheet for Fresh Grads
+## System Architecture Overview
 
 ```
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                    WHEN IS IT QUANTUM?                        ┃
+┃                    COMPONENT BREAKDOWN                        ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
     ╔════════════════════════════╗        ╔═══════════════════════════╗
-    ║   QUANTUM COMPUTING ⚛️      ║        ║   CLASSICAL COMPUTING 💻   ║
+    ║   QUANTUM COMPUTING        ║        ║   CLASSICAL COMPUTING     ║
     ║   (Key Generation)         ║        ║   (Encryption/Decryption) ║
     ╠════════════════════════════╣        ╠═══════════════════════════╣
     ║                            ║        ║                           ║
     ║ ncrypt generate-key        ║        ║ ncrypt encrypt            ║
     ║                            ║        ║ ncrypt decrypt            ║
-    ║ Uses:                      ║        ║                           ║
-    ║ • Superposition states     ║        ║ Uses:                     ║
+    ║ Components:                ║        ║                           ║
+    ║ • Superposition states     ║        ║ Components:               ║
     ║ • Quantum measurement      ║        ║ • AES-256-GCM             ║
     ║ • BB84 protocol            ║        ║ • SHA-256 hashing         ║
-    ║                            ║        ║ • Regular CPU operations  ║
-    ║ Runs on:                   ║        ║                           ║
-    ║ • AWS Braket               ║        ║ Runs on:                  ║
-    ║ • IonQ/Rigetti devices     ║        ║ • Your laptop             ║
-    ║ • Quantum simulator        ║        ║ • Any computer            ║
-    ║                            ║        ║ • No quantum needed       ║
+    ║                            ║        ║ • Standard CPU operations ║
+    ║ Infrastructure:            ║        ║                           ║
+    ║ • AWS Braket               ║        ║ Infrastructure:           ║
+    ║ • IonQ/Rigetti devices     ║        ║ • Local hardware          ║
+    ║ • Quantum simulator        ║        ║ • Any standard computer   ║
+    ║                            ║        ║ • No quantum required     ║
     ║ Cost:                      ║        ║                           ║
-    ║ • Simulator: FREE          ║        ║ Cost:                     ║
-    ║ • Real device: $30-38      ║        ║ • Always FREE             ║
+    ║ • Simulator: Free          ║        ║ Cost:                     ║
+    ║ • Real device: $30-38      ║        ║ • Always free             ║
     ║                            ║        ║                           ║
-    ║ Speed:                     ║        ║ Speed:                    ║
+    ║ Performance:               ║        ║ Performance:              ║
     ║ • ~0.028s for key gen      ║        ║ • 0.006s for encryption   ║
     ║                            ║        ║ • 0.0001s for decryption  ║
     ║                            ║        ║                           ║
     ║ Frequency:                 ║        ║ Frequency:                ║
-    ║ • Once per key             ║        ║ • As many times as needed ║
+    ║ • Once per key             ║        ║ • Unlimited usage         ║
     ║                            ║        ║                           ║
     ╚════════════════════════════╝        ╚═══════════════════════════╝
             │                                        ▲
             │ Produces                               │
-            │                                        │ Uses
+            │                                        │ Consumes
             └────────> [Quantum Key] ─────────────────┘
-                       Stored locally
+                       (Stored locally)
+```
 
+---
 
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                    TYPICAL WORKFLOW                           ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+## Typical Workflow
 
-Step 1: Generate key with quantum computer (ONCE)
-───────────────────────────────────────────────────────────────
+### Step 1: Generate Key with Quantum Computer (One-Time Operation)
+
+```bash
 $ ncrypt generate-key --bits 2000 --key-id mykey --device braket
-⚛️  Quantum operations happening on AWS Braket...
-💰 Cost: $38 (one-time)
-✅ Key saved locally
+Quantum operations on AWS Braket
+Cost: $38 (one-time expense)
+Result: Key stored locally
+```
 
-Step 2: Encrypt files with classical computer (MANY TIMES)
-───────────────────────────────────────────────────────────────
+### Step 2: Encrypt Files with Classical Computer (Unlimited Usage)
+
+```bash
 $ ncrypt encrypt file1.txt --key-id mykey
-💻 Classical AES encryption...
-✅ Done in 0.003s (FREE)
+Classical AES encryption
+Completed in 0.003s (free)
 
 $ ncrypt encrypt file2.txt --key-id mykey
-💻 Classical AES encryption...
-✅ Done in 0.005s (FREE)
+Classical AES encryption
+Completed in 0.005s (free)
 
 $ ncrypt encrypt file3.txt --key-id mykey
-💻 Classical AES encryption...
-✅ Done in 0.002s (FREE)
+Classical AES encryption
+Completed in 0.002s (free)
+```
 
-... use the same quantum key forever!
+Single quantum key enables unlimited classical encryption operations.
 
+---
 
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                    COMMON QUESTIONS                           ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+## Technical Questions
 
-Q: Is my file being encrypted by a quantum computer?
-A: NO! Your file is encrypted with classical AES-256.
-   Only the KEY was generated using quantum.
+### Q: Is file encryption performed by quantum computer?
+**A:** No. Files are encrypted using classical AES-256 algorithm. Only the cryptographic key was generated using quantum processes.
 
-Q: Do I need a quantum computer to decrypt files?
-A: NO! Decryption uses regular CPU, just like encryption.
+### Q: Is quantum hardware required for decryption?
+**A:** No. Decryption uses standard CPU operations, identical to encryption.
 
-Q: What makes it "quantum cryptography" then?
-A: The key was generated using quantum mechanics (BB84 protocol).
-   This makes it theoretically unbreakable (physics, not math).
+### Q: What constitutes "quantum cryptography"?
+**A:** The cryptographic key is generated using quantum mechanical principles (BB84 protocol), providing theoretical security guarantees based on physics rather than computational complexity.
 
-Q: Can I use `encrypt` without internet?
-A: YES! Encryption is local and classical. No quantum access needed.
+### Q: Can encryption operate without internet connectivity?
+**A:** Yes. Encryption is local and classical. No quantum hardware access required for encryption/decryption operations.
 
-Q: Can I use `generate-key` without internet?
-A: Only with --device simulator (free but not secure).
-   Real quantum devices need AWS Braket connection.
+### Q: Can key generation operate without internet connectivity?
+**A:** Only with `--device simulator` flag (free but not quantum-secure). Real quantum devices require AWS Braket network connection.
 
-Q: Why not encrypt directly with quantum?
-A: Too slow! Quantum gates are ~1000x slower than classical.
-   Classical encryption with quantum keys is the best approach.
+### Q: Why not perform encryption directly with quantum computer?
+**A:** Performance constraints. Quantum gates operate approximately 1000× slower than classical operations. The hybrid approach provides optimal performance while maintaining quantum security guarantees.
 
+---
 
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                    DEVICE COMPARISON                          ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+## Device Comparison
 
-simulator (Local, FREE)
-─────────────────────────────────────────────────────────────
-✓ No quantum hardware (just math simulation)
-✓ Instant and free
-✗ Not quantum-secure (uses pseudorandom)
-✗ Don't use for production
-Use for: Learning, testing, demos
+### Simulator (Local, Free)
+```
+Advantages:
+✓ No quantum hardware (mathematical simulation)
+✓ Instant execution
+✓ No cost
 
-braket --backend ionq (IonQ Forte, $38/key)
-─────────────────────────────────────────────────────────────
-✓ Real quantum computer (trapped ions)
+Limitations:
+✗ Not quantum-secure (pseudorandom)
+✗ Unsuitable for production
+
+Use Case: Development, testing, demonstrations
+```
+
+### AWS Braket - IonQ Forte ($38/key)
+```
+Specifications:
+✓ Real quantum computer (trapped ion architecture)
 ✓ True quantum randomness
 ✓ Quantum-secure key generation
-✓ Higher fidelity
-Cost: $0.30/task + $0.08/shot = ~$38 per key
-Use for: Production, maximum security
+✓ Higher fidelity quantum gates
 
-braket --backend rigetti (Rigetti Ankaa-3, $30/key)
-─────────────────────────────────────────────────────────────
-✓ Real quantum computer (superconducting qubits)
+Pricing: $0.30/task + $0.08/shot ≈ $38 per key
+
+Use Case: Production deployments, maximum security requirements
+```
+
+### AWS Braket - Rigetti Ankaa-3 ($30/key)
+```
+Specifications:
+✓ Real quantum computer (superconducting qubit architecture)
 ✓ True quantum randomness
 ✓ Quantum-secure key generation
-✓ Cheaper than IonQ
-Cost: $0.30/task + $0.0009/shot = ~$30 per key
-Use for: Production, budget-conscious
+✓ Cost-effective option
 
+Pricing: $0.30/task + $0.0009/shot ≈ $30 per key
 
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                    REAL ANALOGY                               ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+Use Case: Production deployments, cost-conscious implementations
+```
 
-Think of it like your house:
+---
 
-🔑 QUANTUM (Key Generation)
-   You go to a special quantum locksmith once
-   They use quantum mechanics to create an unbreakable key
-   Costs $30-38
-   You do this ONCE
+## Technical Implementation
 
-🏠 CLASSICAL (Encryption/Decryption)
-   You use that key in regular locks on your doors
-   Open/close your doors as many times as you want
-   Free and instant
-   You do this DAILY
+### Quantum Key Generation (BB84):
+```
+1. Alice prepares qubits: |0⟩, |1⟩, |+⟩, |-⟩
+2. Bob performs random basis measurements
+3. Basis comparison (discard ~50% mismatched)
+4. Error rate verification
+5. Privacy amplification
+→ Output: Quantum-secure key bits
+```
 
-The quantum part makes the key.
-The classical part uses the key.
+### Classical Encryption (AES-256-GCM):
+```
+1. Load quantum key from storage
+2. Derive AES key: SHA-256(quantum_key)
+3. Encrypt: AES-GCM(plaintext, aes_key)
+4. Output: ciphertext + IV + tag
+→ Output: Authenticated encrypted data
+```
 
-You don't need a quantum locksmith to open your door every day!
-You just use the key they gave you.
+---
 
+## Command Reference
 
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                    TECHNICAL DETAILS                          ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-
-Quantum Key Generation (BB84):
-  1. Alice prepares qubits: |0⟩, |1⟩, |+⟩, |-⟩
-  2. Bob measures in random bases
-  3. They compare bases (discard ~50%)
-  4. Check for eavesdropping (error rate)
-  5. Privacy amplification
-  → Result: Quantum-secure key bits
-
-Classical Encryption (AES-256-GCM):
-  1. Load quantum key from disk
-  2. Derive AES key: SHA-256(quantum_key)
-  3. Encrypt: AES-GCM(plaintext, aes_key)
-  4. Output: ciphertext + IV + tag
-  → Result: Encrypted data
-
-
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                    COMMAND QUICK REF                          ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-
-# Generate key (QUANTUM)
+```bash
+# Quantum Key Generation
 ncrypt generate-key --bits 2000 --key-id mykey --device simulator
 ncrypt generate-key --bits 2000 --key-id mykey --device braket --backend ionq
 ncrypt generate-key --bits 2000 --key-id mykey --device braket --backend rigetti
 
-# Encrypt file (CLASSICAL)
+# Classical Encryption
 ncrypt encrypt secret.txt --key-id mykey --output secret.enc
 
-# Decrypt file (CLASSICAL)  
+# Classical Decryption
 ncrypt decrypt secret.enc --key-id mykey --output decrypted.txt
 
-# Check pricing (API call)
+# Pricing Information
 ncrypt show-pricing
 
-# Estimate costs (Calculator)
+# Cost Estimation
 ncrypt estimate-cost --bits 2000 --device ionq
+```
 
+---
 
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                    REMEMBER                                   ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+## Key Concepts
 
-✅ Quantum = KEY generation (once, expensive, special hardware)
-✅ Classical = ENCRYPTION (unlimited, free, any computer)
-✅ Best of both worlds = Secure + Practical
+### Quantum Computing Usage:
+- Key generation only (one-time operation)
+- Resource-intensive and costly
+- Requires specialized hardware
 
-Don't overthink it! 
-- Making the key = Quantum 🌀
-- Using the key = Classical 💻
+### Classical Computing Usage:
+- Encryption and decryption (unlimited operations)
+- Computationally efficient
+- Executes on standard hardware
 
+### Hybrid Approach Benefits:
+- Quantum security guarantees
+- Classical computational efficiency
+- Production-ready implementation

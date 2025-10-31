@@ -3,8 +3,8 @@
 
 set -e
 
-echo "🧪 ncrypt Test Checker"
-echo "======================="
+echo "ncrypt Test Checker"
+echo "==================="
 echo ""
 
 # Colors
@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 
 # Function to check local tests
 check_local() {
-    echo "📍 Checking LOCAL tests..."
+    echo "Checking LOCAL tests..."
     echo ""
     
     # Activate virtual environment if it exists
@@ -26,11 +26,11 @@ check_local() {
     # Run tests
     if python -m pytest tests/ -v --tb=short; then
         echo ""
-        echo -e "${GREEN}✅ All local tests PASSED!${NC}"
+        echo -e "${GREEN}[PASS] All local tests passed${NC}"
         return 0
     else
         echo ""
-        echo -e "${RED}❌ Some local tests FAILED!${NC}"
+        echo -e "${RED}[FAIL] Some local tests failed${NC}"
         return 1
     fi
 }
@@ -38,14 +38,14 @@ check_local() {
 # Function to check GitHub Actions status
 check_github() {
     echo ""
-    echo "🐙 Checking GITHUB Actions status..."
+    echo "Checking GITHUB Actions status..."
     echo ""
     
     # Check if gh CLI is installed
     if ! command -v gh &> /dev/null; then
-        echo -e "${YELLOW}⚠️  GitHub CLI (gh) not installed${NC}"
-        echo "Install with: brew install gh"
-        echo "Or check manually: https://github.com/$(git remote get-url origin | sed 's/.*github.com[:/]\(.*\)\.git/\1/')/actions"
+        echo -e "${YELLOW}[WARN] GitHub CLI (gh) not installed${NC}"
+        echo "Install: brew install gh"
+        echo "Manual check: https://github.com/$(git remote get-url origin | sed 's/.*github.com[:/]\(.*\)\.git/\1/')/actions"
         return 1
     fi
     
@@ -53,8 +53,8 @@ check_github() {
     latest_run=$(gh run list --workflow=tests.yml --limit 1 --json conclusion,status,headBranch,url)
     
     if [ -z "$latest_run" ] || [ "$latest_run" = "[]" ]; then
-        echo -e "${YELLOW}⚠️  No GitHub Actions runs found${NC}"
-        echo "Push your code to trigger the first run!"
+        echo -e "${YELLOW}[WARN] No GitHub Actions runs found${NC}"
+        echo "Push code to trigger initial workflow run"
         return 1
     fi
     
@@ -71,14 +71,14 @@ check_github() {
     echo ""
     
     if [ "$conclusion" = "success" ]; then
-        echo -e "${GREEN}✅ GitHub tests PASSED!${NC}"
+        echo -e "${GREEN}[PASS] GitHub tests passed${NC}"
         return 0
     elif [ "$conclusion" = "failure" ]; then
-        echo -e "${RED}❌ GitHub tests FAILED!${NC}"
-        echo "Check details: $url"
+        echo -e "${RED}[FAIL] GitHub tests failed${NC}"
+        echo "Details: $url"
         return 1
     else
-        echo -e "${YELLOW}⏳ GitHub tests still running...${NC}"
+        echo -e "${YELLOW}[RUNNING] GitHub tests in progress${NC}"
         return 1
     fi
 }
@@ -100,25 +100,25 @@ case "${1:-both}" in
         
         echo ""
         echo "===================="
-        echo "📊 SUMMARY"
+        echo "SUMMARY"
         echo "===================="
         
         if [ $local_result -eq 0 ]; then
-            echo -e "Local:  ${GREEN}✅ PASS${NC}"
+            echo -e "Local:  ${GREEN}PASS${NC}"
         else
-            echo -e "Local:  ${RED}❌ FAIL${NC}"
+            echo -e "Local:  ${RED}FAIL${NC}"
         fi
         
         if [ $github_result -eq 0 ]; then
-            echo -e "GitHub: ${GREEN}✅ PASS${NC}"
+            echo -e "GitHub: ${GREEN}PASS${NC}"
         else
-            echo -e "GitHub: ${YELLOW}⚠️  CHECK MANUALLY${NC}"
+            echo -e "GitHub: ${YELLOW}CHECK MANUALLY${NC}"
         fi
         
         exit $local_result
         ;;
     watch)
-        echo "👀 Watching GitHub Actions..."
+        echo "Monitoring GitHub Actions workflow..."
         gh run watch
         ;;
     *)

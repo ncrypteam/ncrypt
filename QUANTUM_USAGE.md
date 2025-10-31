@@ -1,30 +1,33 @@
-# When Does nCrypt Use Quantum Computing?
+# Quantum Computing Usage in nCrypt
 
+## Overview
+
+nCrypt employs a hybrid quantum-classical approach where quantum computing is utilized exclusively for cryptographic key generation, while classical encryption algorithms handle data encryption operations.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  KEY GENERATION (Quantum)     │  ENCRYPTION (Classical)     │
-│  ✓ Uses quantum computers     │  ✗ No quantum needed        │
-│  ✓ BB84 Protocol              │  ✓ Uses AES-256-GCM         │
-│  ✓ AWS Braket devices         │  ✓ Runs on your laptop      │
-│  ✓ Qubits & superposition     │  ✓ Fast & proven secure     │
+│  Uses quantum computers       │  No quantum hardware needed │
+│  BB84 Protocol                │  AES-256-GCM                │
+│  AWS Braket devices           │  Runs on standard hardware  │
+│  Qubits & superposition       │  Proven cryptographic       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🔑 Part 1: KEY GENERATION (Quantum Computing)
+## Part 1: Quantum Key Generation
 
-### ⚛️ **USES QUANTUM COMPUTING**
+### Quantum Computing Components
 
-**What happens:**
+**Command:**
 ```bash
 $ ncrypt generate-key --bits 2000 --key-id my_key --device braket
 ```
 
-**Behind the scenes:**
+**Process:**
 
-1. **🌀 Quantum State Preparation** (AWS Braket / Real Quantum Hardware)
+1. **Quantum State Preparation** (AWS Braket / Quantum Hardware)
    ```
    Alice prepares qubits in random bases:
    - Rectilinear basis: |0⟩ or |1⟩
@@ -33,58 +36,59 @@ $ ncrypt generate-key --bits 2000 --key-id my_key --device braket
    Example: Bit=1, Basis=Diagonal → Creates qubit in |−⟩ state
    ```
 
-2. **📡 Quantum Transmission** (Simulated quantum channel)
+2. **Quantum Channel Transmission** (Simulated)
    ```
-   Qubits travel through "quantum channel" with noise
+   Qubits transmitted through quantum channel with noise modeling
    - Superposition maintained during transmission
    - Quantum mechanics ensures eavesdropping detection
    ```
 
-3. **📊 Quantum Measurement** (Bob measures qubits)
+3. **Quantum Measurement** (Bob measures qubits)
    ```
    Bob randomly chooses measurement bases
-   - Same basis as Alice → Correct bit (deterministic)
-   - Different basis → Random result (50/50)
+   - Same basis as Alice → Deterministic result
+   - Different basis → Random outcome (50/50 probability)
    ```
 
-4. **🔐 BB84 Protocol** (Quantum Key Distribution)
+4. **BB84 Protocol** (Quantum Key Distribution)
    ```
-   Alice & Bob compare bases publicly:
+   Protocol steps:
+   - Alice & Bob compare bases publicly
    - Keep bits where bases matched
-   - Discard ~50% where bases differed
-   - Check for eavesdropping (error rate)
+   - Discard approximately 50% where bases differed
+   - Verify security through error rate analysis
    - Perform privacy amplification
    
-   Result: Shared secret key that's quantum-secure!
+   Result: Shared secret key with quantum security guarantees
    ```
 
-**Why quantum here?**
-- **Quantum mechanics properties** make eavesdropping detectable
-- **No-cloning theorem**: You can't copy an unknown quantum state
-- **Heisenberg uncertainty**: Measuring changes the state
-- **Eve (eavesdropper) can't intercept without leaving traces**
+**Security Properties:**
+- Quantum mechanics properties enable eavesdropping detection
+- No-cloning theorem prevents copying of unknown quantum states
+- Heisenberg uncertainty ensures measurement disturbs quantum states
+- Eavesdropper cannot intercept without introducing detectable errors
 
-**Cost:** $30-$38 per key generation (uses real quantum circuits)
+**Cost:** $30-$38 per key generation on real quantum hardware
 
 ---
 
-## 🔒 Part 2: ENCRYPTION/DECRYPTION (Classical Computing)
+## Part 2: Classical Encryption/Decryption
 
-### 💻 **NO QUANTUM NEEDED**
+### Classical Computing Components
 
-**What happens:**
+**Commands:**
 ```bash
 $ ncrypt encrypt secret.txt --key-id my_key --output secret.enc
 $ ncrypt decrypt secret.enc --key-id my_key --output decrypted.txt
 ```
 
-**Behind the scenes:**
+**Implementation:**
 
 ```python
-# Classical AES-256-GCM encryption (runs on your CPU)
+# Classical AES-256-GCM encryption
 def encrypt(plaintext, quantum_key):
     # 1. Derive AES key from quantum key bits
-    aes_key = derive_key(quantum_key)  # Classical hashing
+    aes_key = derive_key(quantum_key)  # SHA-256 hashing
     
     # 2. Encrypt using standard AES-256-GCM
     cipher = AES.new(aes_key, AES.MODE_GCM)
@@ -93,275 +97,184 @@ def encrypt(plaintext, quantum_key):
     return ciphertext, cipher.nonce, tag
 ```
 
-**Why NOT quantum here?**
-1. **Speed**: Classical encryption is FAST (millions of bytes/sec)
-2. **Efficiency**: Quantum operations are slow and expensive
-3. **Practicality**: No quantum computer needed for daily encryption
-4. **Standard practice**: Even post-quantum crypto uses classical encryption
+**Rationale for Classical Encryption:**
+1. **Performance**: Classical encryption operates at millions of bytes/second
+2. **Efficiency**: Quantum operations are resource-intensive and costly
+3. **Practicality**: No quantum hardware required for daily operations
+4. **Standard Practice**: Industry-standard approach in post-quantum cryptography
 
-**Cost:** FREE (runs locally on your machine)
+**Cost:** Free (executes on local hardware)
 
 ---
 
-## 🎯 The Hybrid Approach: Best of Both Worlds
+## Hybrid Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    HOW nCrypt WORKS                             │
+│                    SYSTEM ARCHITECTURE                          │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  ONCE: Generate quantum key (expensive, quantum)                │
+│  ONE-TIME: Generate quantum key (resource-intensive)            │
 │         ↓                                                       │
 │    [Quantum Key Stored Locally]                                │
 │         ↓                                                       │
-│  MANY TIMES: Encrypt files (free, classical)                   │
+│  REPEATED: Encrypt files (efficient, classical)                │
 │         ↓                                                       │
 │    [Encrypted Files]                                           │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Real-World Example
+### Operational Example
 
 ```bash
-# Step 1: Generate quantum key (QUANTUM - Uses AWS Braket)
+# Step 1: Generate quantum key (ONE TIME)
 $ ncrypt generate-key --bits 2000 --key-id company_master_key --device braket
-⚛️  Using IonQ quantum device...
-💰 Cost: $38.00
-✓ Quantum key generated (256 bits final)
+Quantum operations on AWS Braket...
+Cost: $38.00 (one-time)
+Key generated (256 bits final)
 
-# Step 2: Encrypt many files (CLASSICAL - Free and fast)
+# Step 2: Encrypt multiple files (UNLIMITED USAGE)
 $ ncrypt encrypt payroll.xlsx --key-id company_master_key
-✓ Encrypted in 0.003 seconds (FREE)
+Encrypted in 0.003 seconds (free)
 
 $ ncrypt encrypt database.sql --key-id company_master_key  
-✓ Encrypted in 0.120 seconds (FREE)
+Encrypted in 0.120 seconds (free)
 
 $ ncrypt encrypt secrets.json --key-id company_master_key
-✓ Encrypted in 0.001 seconds (FREE)
+Encrypted in 0.001 seconds (free)
 ```
 
-**One quantum key → Encrypt unlimited files classically**
+**Single quantum key enables unlimited classical encryption operations**
 
 ---
 
-## 🤔 Why This Design?
+## Design Rationale
 
-### Problem: Pure Quantum Encryption Would Be
+### Limitations of Pure Quantum Encryption
 
-❌ **Too Slow**: Quantum gates take milliseconds  
-❌ **Too Expensive**: $0.08 per shot × millions of operations  
-❌ **Too Limited**: Can't encrypt large files  
-❌ **Unnecessary**: Classical encryption is already secure IF the key is secret  
+- **Speed**: Quantum gates operate at millisecond timescales
+- **Cost**: $0.08 per shot × millions of operations
+- **Scalability**: Cannot efficiently encrypt large datasets
+- **Unnecessary**: Classical encryption is secure with proper key management
 
-### Solution: Hybrid Quantum-Classical
+### Advantages of Hybrid Approach
 
-✅ **Quantum for key generation**: Exploits quantum properties for security  
-✅ **Classical for encryption**: Fast, proven, practical  
-✅ **Best of both**: Quantum security + Classical speed  
+- **Quantum Key Generation**: Exploits quantum properties for provable security
+- **Classical Encryption**: Fast, proven, practical implementation
+- **Optimal Trade-off**: Quantum security guarantees with classical efficiency
 
 ---
 
-## 📊 Visual Comparison
+## Technical Implementation Details
+
+### Quantum Key Generation (BB84):
 
 ```
-╔════════════════════════════════════════════════════════════╗
-║                  QUANTUM vs CLASSICAL                      ║
-╠════════════════════════════════════════════════════════════╣
-║                                                            ║
-║  KEY GENERATION                                           ║
-║  ┌─────────────────────────────────────────────────┐     ║
-║  │ Quantum Computer (AWS Braket)                   │     ║
-║  │                                                 │     ║
-║  │  Alice ──[|0⟩,|+⟩,|1⟩,|-⟩]──> Bob              │     ║
-║  │                                                 │     ║
-║  │  ⚛️  Superposition                              │     ║
-║  │  ⚛️  Entanglement                               │     ║
-║  │  ⚛️  Quantum measurement                        │     ║
-║  │                                                 │     ║
-║  │  Output: [1,0,1,1,0,0,1,...]                   │     ║
-║  └─────────────────────────────────────────────────┘     ║
-║                        ↓                                   ║
-║            ┌──────────────────────┐                       ║
-║            │   Quantum Key        │                       ║
-║            │  (Stored locally)    │                       ║
-║            └──────────────────────┘                       ║
-║                        ↓                                   ║
-║  ENCRYPTION/DECRYPTION                                    ║
-║  ┌─────────────────────────────────────────────────┐     ║
-║  │ Your Laptop (Classical CPU)                     │     ║
-║  │                                                 │     ║
-║  │  AES-256-GCM Encryption                        │     ║
-║  │                                                 │     ║
-║  │  💻 Boolean logic                               │     ║
-║  │  💻 XOR operations                              │     ║
-║  │  💻 Substitution boxes                          │     ║
-║  │                                                 │     ║
-║  │  "Hello" + Key → "ƒ∂˙∆∂∆£"                     │     ║
-║  └─────────────────────────────────────────────────┘     ║
-║                                                            ║
-╚════════════════════════════════════════════════════════════╝
+1. Alice prepares qubits: |0⟩, |1⟩, |+⟩, |-⟩
+2. Bob measures in random bases
+3. Basis comparison (discard ~50%)
+4. Error rate verification for eavesdropping detection
+5. Privacy amplification via universal hashing
+→ Result: Quantum-secure key bits
+```
+
+### Classical Encryption (AES-256-GCM):
+
+```
+1. Load quantum key from storage
+2. Derive AES key: SHA-256(quantum_key)
+3. Encrypt: AES-GCM(plaintext, aes_key)
+4. Output: ciphertext + IV + authentication tag
+→ Result: Encrypted data with authenticated encryption
 ```
 
 ---
 
-## 🔬 Technical Deep Dive
+## Device Comparison
 
-### Quantum Key Generation Code Path
+### Simulator (Local, Free)
+- Mathematical simulation of quantum behavior
+- Instant execution
+- Not quantum-secure (pseudorandom)
+- Use case: Development and testing
 
-```python
-# ncrypt/core/qkd.py - BB84Protocol.run_protocol()
+### AWS Braket - IonQ ($38/key)
+- Real quantum hardware (trapped ions)
+- True quantum randomness
+- Quantum-secure key generation
+- Higher fidelity quantum gates
+- Use case: Production deployments
 
-# QUANTUM PARTS:
-alice_bits = generate_random_bits(2000)          # Classical RNG
-alice_bases = generate_random_bases(2000)        # Classical RNG
-
-# → This gets sent to quantum device:
-qubits = prepare_qubits(alice_bits, alice_bases) # ⚛️ QUANTUM
-#        Creates actual quantum states like:
-#        |ψ⟩ = α|0⟩ + β|1⟩  (superposition)
-
-# → Quantum transmission happens here (simulated):
-bob_bases = generate_random_bases(2000)          # Classical RNG  
-bob_bits = measure_qubits(qubits, bob_bases)     # ⚛️ QUANTUM
-#           Quantum measurement collapses superposition
-
-# CLASSICAL PARTS (post-quantum):
-alice_sifted, bob_sifted = sift_keys(...)        # Classical comparison
-error_rate = estimate_error_rate(...)            # Classical statistics
-final_key = privacy_amplification(...)           # Classical hashing
-```
-
-### Classical Encryption Code Path
-
-```python
-# ncrypt/core/encryption.py - QuantumEncryption.encrypt()
-
-# ALL CLASSICAL - No quantum computer needed:
-
-def encrypt(plaintext, quantum_key):
-    # 1. Convert quantum key bits to bytes (classical)
-    key_bytes = key_to_bytes(quantum_key)
-    
-    # 2. Derive AES key using SHA-256 (classical)
-    aes_key = SHA256(key_bytes)
-    
-    # 3. Standard AES-256-GCM encryption (classical)
-    cipher = AES.new(aes_key, MODE_GCM)
-    ciphertext = cipher.encrypt(plaintext)
-    
-    return ciphertext  # Pure classical cryptography
-```
+### AWS Braket - Rigetti ($30/key)
+- Real quantum hardware (superconducting qubits)
+- True quantum randomness
+- Quantum-secure key generation
+- Cost-effective option
+- Use case: Production deployments
 
 ---
 
-## 🎯 When to Use Each Device
+## Security Analysis
+
+### Classical Cryptography Limitations:
+- Security based on computational complexity assumptions
+- RSA: Vulnerable to Shor's algorithm on quantum computers
+- Potential future vulnerabilities to quantum attacks
+
+### Quantum Cryptography Advantages:
+- Security based on fundamental physics
+- No-cloning theorem: Mathematically proven
+- Measurement disturbance: Fundamental to quantum mechanics
+- Resistant to quantum computing attacks (physics-based security)
+
+---
+
+## Command Reference
 
 ```bash
-# Local Simulator (FREE - No quantum, just simulation)
-$ ncrypt generate-key --device simulator
-Use when: Testing, development, learning
-⚠️  Not quantum-secure (uses pseudorandom numbers)
+# Generate key (Quantum)
+ncrypt generate-key --bits 2000 --key-id mykey --device simulator
+ncrypt generate-key --bits 2000 --key-id mykey --device braket --backend ionq
+ncrypt generate-key --bits 2000 --key-id mykey --device braket --backend rigetti
 
-# AWS Braket - IonQ ($38 per key)
-$ ncrypt generate-key --device braket --backend ionq
-Use when: Production, real quantum security needed
-✓ Real quantum hardware
-✓ True quantum randomness
-✓ Eavesdropping detection
+# Encrypt file (Classical)
+ncrypt encrypt secret.txt --key-id mykey --output secret.enc
 
-# AWS Braket - Rigetti ($30 per key, cheaper!)
-$ ncrypt generate-key --device braket --backend rigetti
-Use when: Budget matters, slightly lower fidelity OK
-✓ Real quantum hardware
-✓ Lower cost per shot
+# Decrypt file (Classical)  
+ncrypt decrypt secret.enc --key-id mykey --output decrypted.txt
+
+# Check pricing
+ncrypt show-pricing
+
+# Estimate costs
+ncrypt estimate-cost --bits 2000 --device ionq
 ```
 
 ---
 
-## 💡 Key Takeaways for Fresh Grads
+## Summary
 
-1. **Quantum ≠ Magic encryption**
-   - It's used for KEY GENERATION only
-   - Actual encryption is still classical (AES)
+**Quantum Computing Usage:**
+- Exclusive to cryptographic key generation
+- Leverages quantum mechanical properties for provable security
+- One-time cost per key
 
-2. **Why BB84 is quantum**
-   - Uses actual quantum states (superposition)
-   - Measurements collapse the state
-   - Physics guarantees security, not math
+**Classical Computing Usage:**
+- All encryption and decryption operations
+- Standard cryptographic algorithms (AES-256-GCM)
+- Unlimited usage at no additional cost
 
-3. **Why encryption stays classical**
-   - Fast (GHz CPU vs MHz quantum gates)
-   - Cheap (free vs $30-$38 per key)
-   - Proven secure with quantum keys
-
-4. **Hybrid approach**
-   - Quantum: Generate unbreakable keys
-   - Classical: Actually encrypt your data
-   - Best of both worlds!
-
-5. **Real-world analogy**
-   - Quantum: The locksmith (makes the key)
-   - Classical: The lock (does the actual securing)
-   - You only need the locksmith once!
+**Hybrid Approach Benefits:**
+- Combines quantum security guarantees with classical efficiency
+- Industry-standard practice for post-quantum cryptography
+- Practical implementation for production systems
 
 ---
 
-## 🔍 See It In Action
+## References
 
-```bash
-# Watch quantum operations (verbose mode)
-$ ncrypt generate-key --bits 2000 --key-id demo --device braket -v
-
-# You'll see quantum-specific operations:
-⚛️  Preparing qubits in superposition...
-⚛️  Sending through quantum channel...
-⚛️  Bob measuring in random bases...
-📊 Sifting: 2000 qubits → 1000 sifted bits (bases matched)
-🔍 Error check: 2.1% error rate (quantum noise)
-✓ Below threshold - channel secure!
-🔐 Privacy amplification: 1000 → 700 final bits
-💾 Saving quantum key locally...
-
-# Then watch classical encryption (instant!)
-$ ncrypt encrypt largefile.zip --key-id demo -v
-
-# You'll see classical operations:
-💻 Loading quantum key from disk...
-💻 Deriving AES-256 key...
-💻 Encrypting with AES-GCM...
-✓ Encrypted 50 MB in 0.23 seconds
-```
-
----
-
-## 📚 Further Reading
-
-- **BB84 Protocol**: Original paper by Bennett & Brassard (1984)
-- **Quantum Key Distribution**: How quantum mechanics enables secure key exchange
-- **AES-256**: Why classical encryption is still used for bulk data
-- **Hybrid Cryptography**: Combining quantum and classical for practical security
-
----
-
-## ❓ Common Questions
-
-**Q: Why not encrypt directly with quantum computers?**  
-A: Too slow and expensive. Classical encryption with quantum keys is optimal.
-
-**Q: Is the encryption quantum-resistant?**  
-A: Yes! The key is quantum-generated, making it secure against quantum attacks.
-
-**Q: Can I use the simulator for production?**  
-A: No - it's pseudorandom. Use real quantum devices (braket) for security.
-
-**Q: How often should I generate new keys?**  
-A: Depends on your security model. One key can encrypt many files safely.
-
-**Q: What makes BB84 quantum?**  
-A: It uses actual quantum superposition and measurement. Can't be done classically.
-
----
-
-*Generated by nCrypt - Quantum Cryptography SDK*
-
+- Bennett & Brassard (1984): BB84 Protocol
+- Quantum Key Distribution: Theoretical foundations
+- AES-256: NIST-approved encryption standard
+- Hybrid Cryptography: Post-quantum cryptographic practices
