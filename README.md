@@ -393,6 +393,18 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📚 External Resources
+
+### Quantum Hardware Documentation
+- **IonQ Forte**: [https://ionq.com/quantum-systems/forte](https://ionq.com/quantum-systems/forte) - 36-qubit trapped ion system
+- **Rigetti QCS**: [https://qcs.rigetti.com/qpus](https://qcs.rigetti.com/qpus) - Ankaa-3 82-qubit superconducting system
+- **AWS Braket**: [https://docs.aws.amazon.com/braket/](https://docs.aws.amazon.com/braket/) - AWS quantum computing service
+
+### Scientific References
+- Bennett & Brassard (1984): BB84 Quantum Key Distribution Protocol
+- NIST Post-Quantum Cryptography Standards
+
 ## 📞 Support
 
 For issues and questions:

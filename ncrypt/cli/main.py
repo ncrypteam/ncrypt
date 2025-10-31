@@ -351,7 +351,13 @@ def test_channel(bits, noise):
 @cli.command()
 @click.option('--profile', '-p', default='default', help='AWS profile')
 def show_pricing(profile):
-    """Show current AWS Braket pricing (fetches from AWS Pricing API)."""
+    """
+    Show current AWS Braket pricing (fetches from AWS Pricing API).
+    
+    Displays real-time pricing for:
+    - IonQ Forte (36 qubits): https://ionq.com/quantum-systems/forte
+    - Rigetti Ankaa-3 (82 qubits): https://qcs.rigetti.com/qpus
+    """
     click.echo("💰 AWS Braket Pricing Information\n")
     
     pricer = BraketPricing(aws_profile=profile)
@@ -645,10 +651,17 @@ def plan_execution(bits, device_arn, runs):
 @click.option('--device', '-d', 
               type=click.Choice(['ionq', 'rigetti', 'simulator']),
               default='ionq',
-              help='Device type')
+              help='Device type (ionq=Forte 36q, rigetti=Ankaa-3 82q)')
 @click.option('--profile', '-p', default='default', help='AWS profile for pricing API')
 def estimate_cost(bits, device, profile):
-    """Estimate cost for quantum device usage using real-time AWS pricing."""
+    """
+    Estimate cost for quantum device usage using real-time AWS pricing.
+    
+    Supported devices:
+    - ionq: IonQ Forte (36 qubits) - https://ionq.com/quantum-systems/forte
+    - rigetti: Rigetti Ankaa-3 (82 qubits) - https://qcs.rigetti.com/qpus
+    - simulator: Local simulator (free)
+    """
     click.echo(f"\n💰 Cost Estimation for {device.upper()}")
     click.echo(f"   Circuits: {bits}")
     click.echo("=" * 50)

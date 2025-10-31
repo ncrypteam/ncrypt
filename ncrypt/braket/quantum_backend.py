@@ -25,6 +25,25 @@ class BraketBackend:
     AWS Braket backend for quantum operations.
     
     Supports both local simulation and real quantum devices through AWS Braket.
+    
+    Supported Quantum Devices:
+        - IonQ Forte: Trapped ion system with 36 qubits (#AQ 36)
+          ARN: arn:aws:braket:us-east-1::device/qpu/ionq/Forte-1
+          Specs: 0.4% 2-qubit gate error, all-to-all connectivity
+          Cost: ~$38 per key generation
+          Docs: https://ionq.com/quantum-systems/forte
+          
+        - Rigetti Ankaa-3: Superconducting system with 82 qubits
+          ARN: arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-3
+          Specs: Square lattice, tunable couplers
+          Cost: ~$30 per key generation
+          Docs: https://qcs.rigetti.com/qpus
+          
+        - Local Simulator: Free, for development and testing only
+          Note: Not quantum-secure, uses pseudorandom numbers
+    
+    References:
+        AWS Braket: https://docs.aws.amazon.com/braket/
     """
     
     def __init__(
@@ -37,9 +56,16 @@ class BraketBackend:
         Initialize Braket backend.
         
         Args:
-            device_arn: ARN of AWS quantum device (e.g., IonQ, Rigetti)
-            use_local_simulator: Use local Braket simulator if True
+            device_arn: ARN of AWS quantum device. Examples:
+                - IonQ Forte: 'arn:aws:braket:us-east-1::device/qpu/ionq/Forte-1'
+                - Rigetti Ankaa-3: 'arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-3'
+            use_local_simulator: Use local Braket simulator if True (not quantum-secure)
             aws_session: Optional AWS session for device access
+            
+        References:
+            Device documentation:
+            - IonQ: https://ionq.com/quantum-systems/forte
+            - Rigetti: https://qcs.rigetti.com/qpus
         """
         if not BRAKET_AVAILABLE:
             raise ImportError(

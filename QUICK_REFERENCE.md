@@ -117,25 +117,32 @@ Use Case: Development, testing, demonstrations
 ### AWS Braket - IonQ Forte ($38/key)
 ```
 Specifications:
-✓ Real quantum computer (trapped ion architecture)
+✓ Trapped ion quantum computer
+✓ 36 qubits (#AQ 36)
+✓ 0.4% 2-qubit gate error
+✓ All-to-all connectivity
+✓ T1/T2: 10-100s / ~1s
 ✓ True quantum randomness
-✓ Quantum-secure key generation
-✓ Higher fidelity quantum gates
 
 Pricing: $0.30/task + $0.08/shot ≈ $38 per key
 
-Use Case: Production deployments, maximum security requirements
+Documentation: https://ionq.com/quantum-systems/forte
+
+Use Case: Production deployments, maximum fidelity requirements
 ```
 
 ### AWS Braket - Rigetti Ankaa-3 ($30/key)
 ```
 Specifications:
-✓ Real quantum computer (superconducting qubit architecture)
+✓ Superconducting quantum computer
+✓ 82-qubit processor
+✓ Square lattice with tunable couplers
 ✓ True quantum randomness
-✓ Quantum-secure key generation
 ✓ Cost-effective option
 
 Pricing: $0.30/task + $0.0009/shot ≈ $30 per key
+
+Documentation: https://qcs.rigetti.com/qpus
 
 Use Case: Production deployments, cost-conscious implementations
 ```

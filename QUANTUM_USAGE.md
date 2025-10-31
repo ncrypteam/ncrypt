@@ -199,19 +199,24 @@ Encrypted in 0.001 seconds (free)
 - Not quantum-secure (pseudorandom)
 - Use case: Development and testing
 
-### AWS Braket - IonQ ($38/key)
-- Real quantum hardware (trapped ions)
-- True quantum randomness
-- Quantum-secure key generation
-- Higher fidelity quantum gates
-- Use case: Production deployments
+### AWS Braket - IonQ Forte ($38/key)
+- Real quantum hardware (trapped ion technology)
+- 36 qubits with #AQ 36 (Algorithmic Qubits)
+- True quantum randomness via quantum measurement
+- 0.4% 2-qubit gate error rate
+- All-to-all qubit connectivity
+- T1/T2 coherence: 10-100s / ~1s
+- Official Documentation: https://ionq.com/quantum-systems/forte
+- Use case: Production deployments, maximum fidelity
 
-### AWS Braket - Rigetti ($30/key)
-- Real quantum hardware (superconducting qubits)
-- True quantum randomness
-- Quantum-secure key generation
-- Cost-effective option
-- Use case: Production deployments
+### AWS Braket - Rigetti Ankaa-3 ($30/key)
+- Real quantum hardware (superconducting qubit technology)
+- 82-qubit processor with tunable couplers
+- Square lattice architecture with high connectivity
+- True quantum randomness via quantum measurement
+- Cost-effective option for production workloads
+- Official Documentation: https://qcs.rigetti.com/qpus
+- Use case: Production deployments, budget-conscious implementations
 
 ---
 
@@ -274,7 +279,13 @@ ncrypt estimate-cost --bits 2000 --device ionq
 
 ## References
 
+### Scientific Literature
 - Bennett & Brassard (1984): BB84 Protocol
 - Quantum Key Distribution: Theoretical foundations
 - AES-256: NIST-approved encryption standard
 - Hybrid Cryptography: Post-quantum cryptographic practices
+
+### Quantum Hardware Documentation
+- IonQ Forte System: https://ionq.com/quantum-systems/forte
+- Rigetti QCS Platform: https://qcs.rigetti.com/qpus
+- AWS Braket Documentation: https://docs.aws.amazon.com/braket/
