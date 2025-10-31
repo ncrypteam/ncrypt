@@ -34,7 +34,7 @@ A comprehensive SDK demonstrating the NCRYPT whitepaper concepts: quantum-resist
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ncrypt.git
+git clone https://github.com/ncrypteam/ncrypt
 cd ncrypt
 
 # Install dependencies
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-For AWS Braket support:
+For [AWS Braket](https://aws.amazon.com/braket/) support:
 ```bash
 pip install -r requirements.txt
 pip install amazon-braket-sdk
@@ -250,17 +250,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Charles Bennett and Gilles Brassard for the BB84 protocol
-- AWS Braket team for quantum device access
-- The quantum computing community
-
 ## 📞 Support
 
 For issues and questions:
-- GitHub Issues: [Report a bug](https://github.com/yourusername/ncrypt/issues)
+- GitHub Issues: [Report a bug](https://github.com/ncrypteam/ncrypt/issues)
 - Documentation: See `technical_details.md` for in-depth information
 
 ## 🔮 Roadmap
@@ -273,6 +266,3 @@ For issues and questions:
 - [ ] Docker container
 
 ---
-
-**⚠️ Note**: This SDK is for educational and research purposes. For production use, ensure compliance with security standards and regulations.
-
