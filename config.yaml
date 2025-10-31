@@ -1,0 +1,41 @@
+# nCrypt Configuration File
+# This file configures quantum cryptography operations
+
+# Key storage directory
+key_storage: ./keys
+
+# BB84 Protocol Settings
+bb84:
+  default_bits: 2000              # Default number of qubits to exchange (2000 ensures 256+ bit keys)
+  noise_level: 0.01               # Simulated channel noise (0.0-0.5)
+  error_threshold: 0.11           # Maximum acceptable QBER (11%)
+  check_sample_ratio: 0.5         # Fraction of sifted key for error checking
+  
+  # Note: BB84 key length reduction:
+  #   - Sifting: ~50% (matching bases)
+  #   - Error checking: 50% used for verification
+  #   - Privacy amplification: 70% retained
+  #   - Example: 2000 qubits → ~350 final bits (sufficient for AES-256)
+
+# Encryption Settings
+encryption:
+  algorithm: AES-256-CBC          # Encryption algorithm
+  key_derivation: HMAC-SHA256     # Key derivation function
+
+# AWS Braket Settings (for real quantum devices)
+braket:
+  use_local_simulator: true       # Use local simulator by default
+  device_arn: null                # ARN of quantum device (e.g., arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1)
+  aws_profile: default            # AWS CLI profile to use
+  batch_size: 100                 # Number of circuits per batch
+
+# Simulator Settings
+simulator:
+  noise_model: null               # Noise model: null, 'depolarizing', 'amplitude_damping'
+  shots: 1024                     # Number of shots per circuit
+
+# Logging
+logging:
+  level: INFO                     # Log level: DEBUG, INFO, WARNING, ERROR
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
